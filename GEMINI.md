@@ -72,15 +72,14 @@ The refined directory structure will be:
 
 ### Phase 1: Data Ingestion & Embedding Pipeline
 
-- **Goal:** Develop a script that can process a ZIP file and create a searchable FAISS index.
+- **Goal:** Develop a script that can process a ZIP file and create a searchable FAISS index from its contents.
 - **Milestones:**
-  1. Implement ZIP archive streaming and extraction using `yauzl` to handle large files efficiently.
-  2. Design and implement an extensible file-parsing module with a common interface (e.g., `src/lib/parsers/`).
-     - Implement initial parsers for `.txt`, `.md`, `.pdf`, and `.docx`.
-  3. Define a clear chunking strategy (size, overlap) for splitting long documents.
-  4. Implement the document splitting and embedding process, storing relevant metadata (source file, chunk ID) with each vector.
-  5. Generate and save the FAISS index to the `data` directory.
-- **Success Criteria:** A standalone script that successfully transforms `input.zip` into `data/faiss.index` with proper metadata.
+  1. Implemented ZIP archive streaming and extraction using `yauzl`.
+  2. Designed and implemented an extensible file-parsing module. This includes dedicated parsers for complex formats (`.pdf`, `.docx`) and a fallback text parser for all other non-binary file types (e.g., `.txt`, `.md`, `.js`, `.py`, `.html`). A blocklist prevents attempts to parse known binary formats.
+  3. Defined and implemented a chunking strategy using LangChain's `RecursiveCharacterTextSplitter`.
+  4. Implemented the document embedding process using `OllamaEmbeddings` and stored metadata with each vector.
+  5. Generated and saved the final `FaissStore` index to the `data` directory.
+- **Success Criteria:** A standalone script (`scripts/ingest.ts`) can successfully transform a user-provided `input.zip` into a `data/faiss.index`, ready for querying. This phase is complete.
 
 ### Phase 2: Conversational RAG Interface
 
