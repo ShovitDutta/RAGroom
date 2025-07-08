@@ -1,0 +1,112 @@
+=======================================================================================================================
+=======================================================================================================================
+You are preparing to initialize a new project—RAGroom—in the current working directory. RAGroom’s architecture is split into two primary components: a backend and a frontend. This project must be implemented in pure Node.js (no additional runtimes or language bindings).
+
+1. Backend (Pure Node.js)
+   - **Core Stack**
+     – Model runtime: Ollama (Node.js client)
+     – Orchestration: LangChain for JavaScript/TypeScript
+     – Chat model: gemma3:1b
+     – Embedding model: nomic-embed-text:latest
+   - **Data Ingestion & Embedding**
+     1. Accept an arbitrary ZIP archive containing any file types.
+     2. Unzip all contents and extract textual data using Node.js libraries.
+     3. Generate embeddings via the nomic-embed-text model.
+     4. Persist embeddings to a local FAISS index (Node.js FAISS bindings).
+   - **Conversational Interface**
+     1. Load the FAISS index to retrieve relevant chunks for user queries.
+     2. Use the gemma3:1b chat model—augmented by retrieved context—for Q&A.
+     3. Maintain conversational state via on‑disk memory (Node.js file I/O).
+
+2. Frontend
+   - To be implemented in Next.js at a later phase. For now, focus exclusively on backend design and implementation.
+
+3. Deliverables & Process
+   1. Create a detailed phase‑by‑phase `GEMINI.md` document outlining all research, design decisions, and implementation steps.
+   2. Follow an iterative workflow—**Research → Ideate → Plan → Document → Plan Revision**—until the architecture is fully vetted.
+   3. Once you estimate ≥ 95% confidence that the design is robust, notify me to either refine the plan further or commence implementation.
+
+Please begin by drafting the initial `GEMINI.md` and an accompanying high‑level implementation plan in pure Node.js. Ensure each phase is clearly defined, with milestones and success criteria.
+=======================================================================================================================
+=======================================================================================================================
+Your Phase‑by‑Phase plan is very solid—you’ve captured the core milestones, dependencies, and deliverables. A few suggestions to tighten it up and ensure production readiness:
+
+1. **Add a Phase –1 (Foundations & Quality)**
+
+   * **Linting & Formatting**:
+     • Set up ESLint/Prettier (or equivalent) in your repo.
+     • Define a consistent code style and enforce it via pre‑commit hooks.
+   * **Type Safety (Optional)**:
+     • Consider using TypeScript (or JSDoc annotations) in `src/` and `scripts/`.
+     • This will catch type‑level issues in your ingestion and conversational logic.
+
+2. **Phase 0 Enhancements**
+
+   * **Environment Management**:
+     • Document all required `.env` variables in a `.env.example`.
+     • Add scripts for `dotenv-safe` or similar to validate presence of required keys.
+   * **Directory Structure Refinement**:
+
+     ```
+     /src
+       /api
+       /lib        ← reusable modules (e.g. zip, parsing, embeddings)
+       /models     ← Ollama client wrappers
+     /scripts
+     /data         ← FAISS indices, interim files
+     /tests        ← unit & integration tests
+     ```
+   * **Git & CI**:
+     • Initialize a Git repo and define CI workflows (GitHub Actions, GitLab CI) to run linting, tests, and type checks on PRs.
+
+3. **Phase 1: Ingestion Pipeline**
+
+   * **Streaming & Memory**:
+     • For large ZIPs, stream‑unzip (e.g. `yauzl`) to avoid huge temp directories.
+     • Implement backpressure if you see high‑volume data.
+   * **File‑Type Extensibility**:
+     • Abstract your parsers behind a common interface so you can “plug in” new formats later.
+     • E.g. `parsers/pdf.js`, `parsers/docx.js`, `parsers/plain.js`.
+   * **Chunking Strategy**:
+     • Decide on chunk sizes and overlap heuristics (e.g. for long documents).
+     • Log metadata (source file, byte offsets, chunk IDs) into the FAISS payload.
+
+4. **Phase 2: Conversational RAG Interface**
+
+   * **Retrieval Chain Patterns**:
+     • Consider caching recent retrieval results in memory to speed up back‑to‑back queries.
+     • Define a maximum context window for the chat model to avoid exceeding token limits.
+   * **Chat History & Memory**:
+     • Use a Ring Buffer or an LRU‑based approach to cap memory size.
+     • Version your `chat_history.json` schema in case you need to migrate later.
+
+5. **Phase 3: API Server**
+
+   * **Error Handling & Validation**:
+     • Validate incoming ZIP uploads (size limits, file type whitelists).
+     • Centralize error middleware in Express to return consistent error payloads.
+   * **Security**:
+     • Sanitize file names on upload to avoid path‑traversal.
+     • Rate‑limit your endpoints (e.g. `express-rate-limit`).
+   * **Observability**:
+     • Integrate request‑logging (Morgan or Winston) and basic metrics (response times, success rates).
+     • Optionally add health‑check endpoints and readiness probes.
+
+6. **Testing & Release**
+
+   * **Phase 4: Testing & Documentation**
+
+     1. Write unit tests for each ingestion module and the retrieval chain.
+     2. Add end‑to‑end tests for the ZIP→chat flow (using a small sample archive).
+     3. Generate API docs (e.g. via Swagger/OpenAPI) for your `/api/*` endpoints.
+   * **Phase 5: Packaging & Deployment**
+
+     1. Dockerize the backend (and a minimal FAISS sidecar if needed).
+     2. Define Kubernetes manifests or simple Docker‑Compose stacks.
+     3. Automate builds and deploys via CI/CD.
+
+---
+
+With these additions, your `GEMINI.md` will not only cover “research → plan → implementation,” but also ensure code quality, scalability, security, and maintainability. Let me know if you’d like me to draft the updated `GEMINI.md` outline incorporating these points, or if you’d prefer to refine any particular phase in more depth before proceeding to implementation.
+=======================================================================================================================
+=======================================================================================================================
