@@ -10,6 +10,7 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "check:ollama": "ts-node scripts/check-ollama.ts",
     "ingest": "ts-node scripts/ingest.ts",
+    "chat": "ts-node scripts/chat.ts",
     "prepare": "husky"
   },
   "keywords": [],
