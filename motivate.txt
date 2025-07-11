@@ -1,9 +1,0 @@
-Hello! I need your help to continue working on my project, RAGroom. Your task is to act as a software engineering assistant and help me complete the project based on the provided context.
-
-1. Project Plan & Progress (GEMINI.md)
-Here is the project's GEMINI.md file, which outlines our progress and the remaining tasks in a TODO list format.
-- @GEMINI.md
-- Project File Structure: run cd since i am in powershell
-
-Your Task
-- Based on the provided GEMINI.md TODO list and the file structure, please proceed with the next incomplete task.
