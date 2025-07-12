@@ -50,17 +50,25 @@ git push origin your-feature-name
 ```
 This command sends your commits to your personal GitHub repository. It does **not** affect the `official` repository.
 
-### 4. (Optional) Updating Your Feature Branch
+### 5. Post-Merge Integration Steps
 
-If the `official` repository is updated while you are still working on your feature, you can pull those changes into your feature branch.
+After successfully merging changes from `upstream`, follow these steps to ensure the repository is stable and up-to-date.
 
-```bash
-# First, update your main branch (see Step 1)
-git checkout main
-git fetch upstream
-git merge upstream/main
+1.  **Resolve Merge Conflicts (If Any)**:
+    - If `git merge` reports conflicts, manually edit the conflicted files to resolve the differences.
+    - After resolving, stage the changes using `git add .`.
+    - Complete the merge by running `git commit`. Git will often provide a pre-populated commit message.
 
-# Then, go back to your feature branch and rebase
-git checkout your-feature-name
-git rebase main
-```
+2.  **Install Dependencies**:
+    - The `official` repository may have added or updated dependencies. Run `npm install` to sync your `node_modules` directory.
+    ```bash
+    npm install
+    ```
+
+3.  **Run Validation Checks**:
+    - It is critical to run the full preflight check to ensure that the merged codebase is free of errors and passes all quality gates.
+    ```bash
+    npm run preflight
+    ```
+
+Once these steps are complete, your `main` branch is fully updated and validated, and you can proceed with creating feature branches.
