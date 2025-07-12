@@ -40,7 +40,17 @@ Never work directly on the `main` branch. Create a new branch for each feature o
 git checkout -b your-feature-name
 ```
 
-### 3. (Optional) Updating Your Feature Branch
+### 3. Save Your Work to Your Remote Fork
+
+When you want to save your work or back it up, push your feature branch to your remote fork on GitHub (named `origin`).
+
+```bash
+# Push your feature branch to origin
+git push origin your-feature-name
+```
+This command sends your commits to your personal GitHub repository. It does **not** affect the `official` repository.
+
+### 4. (Optional) Updating Your Feature Branch
 
 If the `official` repository is updated while you are still working on your feature, you can pull those changes into your feature branch.
 

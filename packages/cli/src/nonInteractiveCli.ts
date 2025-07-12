@@ -18,6 +18,7 @@ import {
   FunctionCall,
   GenerateContentResponse,
 } from '@google/genai';
+import { retrieveContextForQuery } from '@google/gemini-cli-core';
 
 import { parseAndFormatApiError } from './ui/utils/errorParsing.js';
 
@@ -62,7 +63,11 @@ export async function runNonInteractive(
 
   const chat = await geminiClient.getChat();
   const abortController = new AbortController();
-  let currentMessages: Content[] = [{ role: 'user', parts: [{ text: input }] }];
+
+  const ragContext = await retrieveContextForQuery(input);
+  const finalInput = ragContext || input;
+
+  let currentMessages: Content[] = [{ role: 'user', parts: [{ text: finalInput }] }];
 
   try {
     while (true) {

@@ -36,6 +36,7 @@ import {
   logUserPrompt,
   AuthType,
   getOauthClient,
+  RagIngestTool,
 } from '@google/gemini-cli-core';
 import { validateAuthMethod } from './config/auth.js';
 import { setMaxSizedBoxDebugging } from './ui/components/shared/MaxSizedBox.js';
@@ -109,6 +110,13 @@ export async function main() {
     for (const extension of extensions) {
       console.log(`- ${extension.config.name}`);
     }
+    process.exit(0);
+  }
+
+  if (config.getIngestDirectory()) {
+    const ragIngestTool = new RagIngestTool(config);
+    const result = await ragIngestTool.execute({ directory: config.getIngestDirectory()! }, new AbortController().signal);
+    console.log(result.returnDisplay);
     process.exit(0);
   }
 

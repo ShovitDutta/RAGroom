@@ -21,6 +21,7 @@
   ],
   "dependencies": {
     "@google/genai": "1.8.0",
+    "@lancedb/lancedb": "^0.21.1",
     "@modelcontextprotocol/sdk": "^1.11.0",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/exporter-logs-otlp-grpc": "^0.52.0",
@@ -31,6 +32,7 @@
     "@types/glob": "^8.1.0",
     "@types/html-to-text": "^9.0.4",
     "ajv": "^8.17.1",
+    "chalk": "^5.3.0",
     "diff": "^7.0.0",
     "dotenv": "^17.1.0",
     "gaxios": "^7.1.1",
@@ -39,18 +41,24 @@
     "html-to-text": "^9.0.5",
     "ignore": "^7.0.0",
     "micromatch": "^4.0.8",
+    "ollama": "^0.5.16",
     "open": "^10.1.2",
+    "ora": "^8.2.0",
+    "pdf-poppler": "^0.2.1",
+    "sbd": "^1.0.19",
     "shell-quote": "^1.8.3",
     "simple-git": "^3.28.0",
     "strip-ansi": "^7.1.0",
     "undici": "^7.10.0",
-    "ws": "^8.18.0"
+    "ws": "^8.18.0",
+    "sharp": "^0.34.3"
   },
   "devDependencies": {
     "@types/diff": "^7.0.2",
     "@types/dotenv": "^6.1.1",
     "@types/micromatch": "^4.0.8",
     "@types/minimatch": "^5.1.2",
+    "@types/sbd": "^1.0.5",
     "@types/ws": "^8.5.10",
     "typescript": "^5.3.3",
     "vitest": "^3.1.1"
